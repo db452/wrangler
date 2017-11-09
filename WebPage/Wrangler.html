@@ -64,12 +64,18 @@ textarea:focus {
 <option value="f6">Function Extraction</option>
 <option value="f7">Introduce New Variable</option>
 <option value="f8">Inline Variable</option>
-<option value="f9">Fold Expression Against Function</option>
+<option value="f9">Fold Expression Against Function</div>option>
 <option value="f10">Tuple Function Arguments</option>
 <option value="f11">Unfold Function Application</option>
 </select> 
 
-<button type="btn1">Refractor!</button> <!--onclick shows a popup where you can type in name, new variable etc.-->
+<button class="btn1" onclick="openPopup()">Refractor!</button>
+
+<script>
+    function openPopup() {
+        window.open("file:///C:/Users/Dennis/Documents/GitHub/wrangler/WebPage/popup.html", "_blank", "toolbar=yes,scrollbars=yes,resizable=yes,top=500,left=500,width=400,height=400");
+    }
+</script>
       
 </body>
-</html>
+</html>                 
