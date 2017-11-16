@@ -38,6 +38,8 @@ textarea:focus {
 </style>
 
 <body>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+        <script src="js/scripts.js"></script>
 
 <h1 style="color:#181874;">Welcome to Wrangler Online</h1>
 <p style="color:#181874;">On this page you can submit any piece of Erlang code and refractor it online!</p>
@@ -46,11 +48,11 @@ textarea:focus {
 
 <div class="inline-div">
         <p style="color:#181874;" align="center">Before</p>
-        <textarea cols="15" rows="15" class="inline-txtarea"></textarea>
+        <textarea id="txtarea1" cols="15" rows="15" class="inline-txtarea"></textarea>
     </div>
     <div class="inline-div">
     <p style="color:#181874;" align="center">After</p>
-        <textarea cols="15" rows="15" class="inline-txtarea"></textarea>
+        <textarea id="txtarea2" cols="15" rows="15" class="inline-txtarea"></textarea>
     </div>
       
 <br>
@@ -64,18 +66,27 @@ textarea:focus {
 <option value="f6">Function Extraction</option>
 <option value="f7">Introduce New Variable</option>
 <option value="f8">Inline Variable</option>
-<option value="f9">Fold Expression Against Function</div>option>
+<option value="f9">Fold Expression Against Function</option>
 <option value="f10">Tuple Function Arguments</option>
 <option value="f11">Unfold Function Application</option>
 </select> 
 
 <button class="btn1" onclick="openPopup()">Refractor!</button>
+<br>
+<input type="range" onchange="changeSlider(this.value)" value="0">
 
 <script>
     function openPopup() {
-        window.open("file:///C:/Users/Dennis/Documents/GitHub/wrangler/WebPage/popup.html", "_blank", "toolbar=yes,scrollbars=yes,resizable=yes,top=500,left=500,width=400,height=400");
+    var person = prompt("Please choose a new variable name");
     }
 </script>
-      
+<script>
+function changeSlider(val){
+    var t1 = document.getElementById('txtarea1');
+    t1.scrollTop = val/100*t1.scrollHeight;
+    var t2 = document.getElementById('txtarea2');
+    t2.scrollTop = val/100*t2.scrollHeight;
+}
+</script>
 </body>
 </html>                 
