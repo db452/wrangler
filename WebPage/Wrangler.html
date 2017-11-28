@@ -14,6 +14,19 @@ p {
     text-align: center;
 }
 
+.slider-wrapper {
+  width: 20px;
+  height: 150px;
+  padding: 0;
+}
+.slider-wrapper input {
+  width: 100px;
+  height: 20px;
+  margin: 0;
+  transform-origin: 75px 75px;
+  transform: rotate(90deg);
+}
+
 .inline-div {
     display:inline-block;
     width: 30%;
@@ -48,17 +61,18 @@ textarea:focus {
 
 <div class="inline-div">
         <p style="color:#181874;" align="center">Before</p>
-        <textarea id="txtarea1" cols="15" rows="15" class="inline-txtarea"></textarea>
+        <textarea id="txtarea1" style="overflow:hidden" cols="15" rows="15" class="inline-txtarea"></textarea>
     </div>
+    
     <div class="inline-div">
     <p style="color:#181874;" align="center">After</p>
-        <textarea id="txtarea2" cols="15" rows="15" class="inline-txtarea"></textarea>
+        <textarea id="txtarea2" style="overflow:hidden" cols="15" rows="15" class="inline-txtarea"></textarea>
     </div>
       
 <br>
 
-<select id="Options1">
-<option value="f1" selected="selected">Rename Variable Name</option>
+<select name="Options">
+<option value="f1">Rename Variable Name</option>
 <option value="f2">Rename Function Name</option>
 <option value="f3">Rename Module Name</option>
 <option value="f4">Generalise Function Definition</option>
@@ -71,49 +85,16 @@ textarea:focus {
 <option value="f11">Unfold Function Application</option>
 </select> 
 
-
 <button class="btn1" onclick="openPopup()">Refractor!</button>
 <br>
-<input type="range" onchange="changeSlider(this.value)" value="0">
-
+<div class="slider-wrapper">
+    <input type="range" onchange="changeSlider(this.value)" value="0">
+</div>
 
 <script>
     function openPopup() {
-    var b = document.getElementById("Options1");
-    var opt = b.options[b.selectedIndex].value;
-     if(opt==="f1")
-     {
-     prompt("Please choose an old variable name");
-     prompt("Please choose a new variable name");
-     }
-     else if(opt==="f2"){
-         prompt("Please choose an old function name");
-         prompt("Please choose a new function name");
-     }
-     else if(opt==="f3"){
-         prompt("Please choose an old module name");
-         prompt("Please choose a new module name")
-     }
-     else if(opt==="f4"){
-         prompt("Please choose old parameter name");
-         prompt("Please choose new parameter name")
-     }
-     else if(opt==="f5"){
-         prompt("Please specify target module name");
-     }
-     else if(opt==="f6"){
-         prompt("Please specify new function name");
-     }
-     else if(opt==="f7"){
-         prompt("Please specify new variable name");
-     }
-     else if(opt==="f8"){
-         prompt("Please select variable name");
-     }
-     else if(opt==="f10"){
-         prompt("Please select a sequence of parameters");
-     }
-}
+    var person = prompt("Please choose a new variable name");
+    }
 </script>
 <script>
 function changeSlider(val){
