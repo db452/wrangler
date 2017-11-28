@@ -14,6 +14,19 @@ p {
     text-align: center;
 }
 
+.slider-wrapper {
+  width: 20px;
+  height: 150px;
+  padding: 0;
+}
+.slider-wrapper input {
+  width: 100px;
+  height: 20px;
+  margin: 0;
+  transform-origin: 75px 75px;
+  transform: rotate(90deg);
+}
+
 .inline-div {
     display:inline-block;
     width: 30%;
@@ -48,11 +61,11 @@ textarea:focus {
 
 <div class="inline-div">
         <p style="color:#181874;" align="center">Before</p>
-        <textarea id="txtarea1" cols="15" rows="15" class="inline-txtarea"></textarea>
+        <textarea id="txtarea1" style="overflow:hidden" cols="15" rows="15" class="inline-txtarea"></textarea>
     </div>
     <div class="inline-div">
     <p style="color:#181874;" align="center">After</p>
-        <textarea id="txtarea2" cols="15" rows="15" class="inline-txtarea"></textarea>
+        <textarea id="txtarea2" style="overflow:hidden" cols="15" rows="15" class="inline-txtarea"></textarea>
     </div>
       
 <br>
@@ -74,7 +87,9 @@ textarea:focus {
 
 <button class="btn1" onclick="openPopup()">Refractor!</button>
 <br>
-<input type="range" onchange="changeSlider(this.value)" value="0">
+<div class="slider-wrapper">
+    <input type="range" onchange="changeSlider(this.value)" value="0">
+</div>
 
 
 <script>
