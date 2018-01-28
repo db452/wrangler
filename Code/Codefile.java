@@ -4,38 +4,26 @@
  * @ Dennis Bettels
  * @ 26/01/2018
  */
-public class Codefile
-{
-    // instance variables - replace the example below with your own
-    
 
-    public static void main(String[] args) {
+
+import java.io.IOException;
+
+public class Codefile {
+
+	public static void main(String[] args) {
 		try {
-			System.out.println("Opening notepad");
+			System.out.println("Opening Erlang");
 			Runtime runTime = Runtime.getRuntime();
-			Process process = runTime.exec("notepad");
+			Process process = runTime.exec("C:\\Program Files (x86)\\erl5.9\\bin\\werl.exe");
 			try {
 				Thread.sleep(5000);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			System.out.println("Closing notepad");
+			System.out.println("Closing Erlang");
 			process.destroy();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
-}
-
-    /**
-     * An example of a method - replace this comment with your own
-     *
-     * @param  y  a sample parameter for a method
-     * @return    the sum of x and y
-     */
-    public int sampleMethod(int y)
-    {
-        // put your code here
-        return x + y;
-    }
 }
