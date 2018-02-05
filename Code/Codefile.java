@@ -7,23 +7,19 @@
 
 
 import java.io.IOException;
-
+import com.ericsson.otp.erlang.*;
 public class Codefile {
 
-	public static void main(String[] args) {
-		try {
-			System.out.println("Opening Erlang");
-			Runtime runTime = Runtime.getRuntime();
-			Process process = runTime.exec("C:\\Program Files (x86)\\erl5.9\\bin\\werl.exe");
-			try {
-				Thread.sleep(5000);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-			System.out.println("Closing Erlang");
-			process.destroy();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+	public static void main(String[] args) throws IOException {
+		
+			OtpNode node = new OtpNode("gurka");
+			OtpMbox mbox = node.createMbox("server");  
+			if (node.ping("remote",2000)) {
+				System.out.println("remote is up");
+			  }
+			  else {
+				System.out.println("remote is not up");
+			 } 
+
 	}
 }

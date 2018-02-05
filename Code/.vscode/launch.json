@@ -12,14 +12,13 @@
             "console": "internalConsole",
             "stopOnEntry": false,
             "mainClass": "Codefile",
-            "args": ""
+            "args": "",
+            //"classPaths": [
+            //    "C:\\Users\\Dennis\\Documents\\GitHub\\wrangler\\Code\\Codefile.java",
+            //    "C:\\Program Files (x86)\\erl5.9\\lib\\jinterface-1.5.5\\priv\\OtpErlang.jar"
+            //    cd("C:/Users/Dennis/Desktop/erlang test1").
+            //]
         },
-        {
-            "type": "java",
-            "name": "Debug (Attach)",
-            "request": "attach",
-            "hostName": "localhost",
-            "port": 0
-        }
+        
     ]
 }
