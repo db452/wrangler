@@ -8,18 +8,24 @@
 
 import java.io.IOException;
 import com.ericsson.otp.erlang.*;
+import java.math.BigInteger;
 public class Codefile {
 
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] _args) throws IOException, OtpErlangExit, OtpErlangDecodeException {
 		
-			OtpNode node = new OtpNode("gurka");
+			OtpNode node = new OtpNode("MainNode");
 			OtpMbox mbox = node.createMbox("server");  
-			if (node.ping("remote",2000)) {
-				System.out.println("remote is up");
-			  }
-			  else {
-				System.out.println("remote is not up");
-			 } 
+
+			OtpErlangObject o;
+ 			OtpErlangTuple msg;
+			OtpErlangPid from;
+			 
+			BigInteger n;
+ 			OtpErlangAtom ok = new OtpErlangAtom("ok");
+
+ 			mbox.send(from,tuple);
+
+
 
 	}
 }
