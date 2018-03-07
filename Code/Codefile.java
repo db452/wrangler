@@ -8,7 +8,6 @@
 
 import java.io.IOException;
 import com.ericsson.otp.erlang.*;
-import java.math.BigInteger;
 public class Codefile {
 
 	public static void main(String[] _args) throws IOException, OtpErlangExit, OtpErlangDecodeException {
@@ -18,14 +17,13 @@ public class Codefile {
 
 			OtpErlangObject o;
  			OtpErlangTuple msg;
-			OtpErlangPid from;
-			 
-			BigInteger n;
+			OtpErlangPid from;			 
  			OtpErlangAtom ok = new OtpErlangAtom("ok");
 
  			mbox.send(from,tuple);
 
-
+			//communicate with rename_var by including them in the same package
+			//receive input from html file.
 
 	}
 }
