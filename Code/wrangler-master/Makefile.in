@@ -1,0 +1,247 @@
+APPNAME = wrangler
+include vsn.mk
+
+prefix       = @prefix@
+exec_prefix  = @exec_prefix@
+libdir       = @libdir@
+LIB_DIR      = @ERLANG_INSTALL_LIB_DIR@/$(APPNAME)-$(VERSION)
+ERL          = "@ERL@"
+ERLC         = "@ERLC@"
+
+DOC_OPTS={def,{version,\"$(VERSION)\"}}
+
+########################################
+## Main part
+
+YRL = src/wrangler_parse.yrl
+
+YRL_ERL =  $(patsubst src/%.yrl,src/%.erl, $(YRL)))
+
+FIRST_ERL = src/wrangler_expand_rule.erl \
+   src/wrangler_scan.erl src/wrangler_epp_dodger.erl \
+   src/wrangler_syntax.erl src/wrangler_syntax_lib.erl \
+   src/wrangler_misc.erl src/api_ast_traverse.erl src/api_refac.erl
+
+FIRST_SRC= $(FIRST_YRL) $(FIRST_ERL)
+
+BUILD_FIRST = $(patsubst src/%.yrl,ebin/%.beam, $(YRL)) \
+                $(patsubst src/%.erl,ebin/%.beam, $(FIRST_ERL))
+
+ERL_SRC = $(wildcard src/*.erl)
+
+ERL_BEH_EXTRACTION_SRC = $(wildcard src/behaviour_extraction/*.erl)
+
+ERL_GEN_REFACS_SRC = $(wildcard src/gen_refacs/*.erl)
+
+ERL_MY_GEN_REFACS_SRC= $(wildcard src/my_gen_refacs/*.erl)
+
+ERL_GEN_COMP_SRC = $(wildcard src/gen_composite_refacs/*.erl)
+
+ERL_MY_GEN_COMP_SRC = $(wildcard src/my_gen_composite_refacs/*.erl)
+
+ERL_EVAL_SRC = $(wildcard src/symbolic_evaluation/evaluator/*.erl)
+ERL_CORE_SRC = $(wildcard src/symbolic_evaluation/core/*.erl)
+ERL_REFAC_SRC = $(wildcard src/symbolic_evaluation/refactorings/*.erl)
+ERL_UTILS_SRC = $(wildcard src/symbolic_evaluation/utils/*.erl)
+ERL_DEF_SRC = $(wildcard src/symbolic_evaluation/tests/definitions/*.erl)
+
+LAST_SRC = $(filter-out $(FIRST_SRC), $(ERL_SRC)) $(ERL_GEN_REFACS_SRC) \
+   $(ERL_MY_GEN_REFACS_SRC) $(ERL_GEN_COMP_SRC) $(ERL_MY_GEN_COMP_SRC) \
+	$(ERL_EVAL_SRC) $(ERL_CORE_SRC) $(ERL_REFAC_SRC) \
+		$(ERL_UTILS_SRC) $(ERL_BEH_EXTRACTION_SRC) \
+			$(ERL_DEF_SRC)  
+
+ERL_LAST = $(patsubst src/%.erl,ebin/%.beam,$(ERL_SRC)) \
+	$(patsubst src/behaviour_extraction/%.erl, ebin/%.beam, $(ERL_BEH_EXTRACTION_SRC)) \
+	$(patsubst src/gen_refacs/%.erl, ebin/%.beam, $(ERL_GEN_REFACS_SRC)) \
+	$(patsubst src/my_gen_refacs/%.erl, ebin/%.beam, \
+	  $(ERL_MY_GEN_REFACS_SRC)) \
+	$(patsubst src/gen_composite_refacs/%.erl, ebin/%.beam, \
+	  $(ERL_GEN_COMP_SRC)) \
+	$(patsubst src/my_gen_composite_refacs/%.erl, ebin/%.beam, \
+	  $(ERL_MY_GEN_COMP_SRC)) \
+	$(patsubst src/symbolic_evaluation/evaluator/%.erl, ebin/%.beam, \
+	  $(ERL_EVAL_SRC)) \
+	$(patsubst src/symbolic_evaluation/core/%.erl, ebin/%.beam, \
+	  $(ERL_CORE_SRC)) \
+	$(patsubst src/symbolic_evaluation/refactorings/%.erl, ebin/%.beam, \
+	  $(ERL_REFAC_SRC)) \
+	$(patsubst src/symbolic_evaluation/utils/%.erl, ebin/%.beam, \
+	  $(ERL_UTILS_SRC)) \
+	$(patsubst src/symbolic_evaluation/tests/definitions/%.erl, ebin/%.beam, \
+	  $(ERL_DEF_SRC))
+
+ERL_OBJ = $(BUILD_FIRST) $(ERL_LAST)
+
+.PHONY: default all conf erl c elisp
+
+default: conf erl c elisp
+
+all: default docs
+
+CONF_SRC = Makefile.in c_src/suffixtree/Makefile.in \
+		c_src/gsuffixtree/Makefile.in
+CONF_OBJ = $(patsubst %.in,%,$(CONF_SRC))
+
+ELISP_SRC = elisp/wrangler.el.src
+
+ELISP_OBJ = $(patsubst elisp/%.src, elisp/%, $(ELISP_SRC))
+
+conf: $(CONF_OBJ)
+
+erl: $(ERL_OBJ)
+
+c:
+	@cd ./c_src; make; cd ../..
+
+elisp: $(ELISP_OBJ)
+
+########################################
+## Rules
+
+$(CONF_OBJ): configure $(CONF_SRC)
+	./configure
+
+.SUFFIXES: .erl .yrl
+
+## Erlang
+
+## Parallel dependencies
+src/api_refac.erl: ebin/wrangler_expand_rule.beam ebin/wrangler_syntax.beam
+
+$(FIRST_ERL): ebin/wrangler_parse.beam
+
+$(LAST_SRC): $(BUILD_FIRST)
+
+$(ERL_GEN_REFACS_SRC) $(ERL_MY_GEN_REFACS_SRC): ebin/gen_refac.beam
+
+src/refac_batch_rename_fun.erl $(ERL_GEN_COMP_SRC) \
+   $(ERL_MY_GEN_COMP_SRC): ebin/gen_composite_refac.beam
+
+##
+
+ebin/%.beam: src/%.erl
+	$(ERLC) -pa ebin -I include -W -o ebin +debug_info $<
+
+ebin/%.beam: src/behaviour_extraction/%.erl
+	$(ERLC) -pa ebin -I include -W -o ebin +debug_info $<
+
+ebin/%.beam: src/gen_refacs/%.erl
+	$(ERLC) -pa ebin -I include -W -o ebin +debug_info $<
+
+ebin/%.beam: src/my_gen_refacs/%.erl
+	$(ERLC) -pa ebin -I include -W -o ebin +debug_info $<
+
+ebin/%.beam: src/gen_composite_refacs/%.erl
+	$(ERLC) -pa ebin -I include -W -o ebin +debug_info $<
+
+ebin/%.beam: src/my_gen_composite_refacs/%.erl
+	$(ERLC) -pa ebin -I include -W -o ebin +debug_info $<
+
+ebin/%.beam: src/symbolic_evaluation/evaluator/%.erl
+	$(ERLC) -pa ebin -I include -W -o ebin +debug_info $<
+
+ebin/%.beam: src/symbolic_evaluation/core/%.erl
+	$(ERLC) -pa ebin -I include -W -o ebin +debug_info $<
+
+ebin/%.beam: src/symbolic_evaluation/refactorings/%.erl
+	$(ERLC) -pa ebin -I include -W -o ebin +debug_info $<
+
+ebin/%.beam: src/symbolic_evaluation/utils/%.erl
+	$(ERLC) -pa ebin -I include -W -o ebin +debug_info $<
+
+ebin/%.beam: src/symbolic_evaluation/tests/definitions/%.erl
+	$(ERLC) -pa ebin -I include -W -o ebin +debug_info $<
+
+ebin/%.beam: include/wrangler.hrl include/wrangler_internal.hrl
+
+src/%.erl: src/%.yrl
+	$(ERLC) -o src $<
+
+$(ELISP_OBJ): $(ELISP_SRC)
+	cp $(ELISP_SRC) $(ELISP_OBJ);
+	escript ebin/dynamic_menu_items >>$(ELISP_OBJ)
+
+########################################
+
+
+clean:
+	@cd ./c_src; make clean; cd ../..
+	@-rm -f ${ERL_OBJ} src/wrangler_parse.erl
+	@-rm -f $(ELISP_OBJ)
+	@-rm -f priv/suffixtree priv/gsuffixtree
+	@-rm -f doc/*.html doc/edoc-info doc/erlang.png doc/stylesheet.css
+	@-rm -f doc/*/*.html doc/*/edoc-info doc/*/erlang.png doc/*/stylesheet.css
+	@-rm -f doc/*/*/*.html doc/*/*/edoc-info doc/*/*/erlang.png doc/*/*/stylesheet.css
+	@-rm -f doc/*.erl
+
+distclean: clean
+	@-rm -f $(CONF_OBJ)
+	@-rm -f config.* configure.scan
+	@-rm -rf autom4te.cache
+
+install: default
+	@echo "* Installing Emacs Lisp Library"
+	install -m 775 -d $(DESTDIR)$(LIB_DIR)/elisp
+	install -m 775 elisp/*.el $(DESTDIR)$(LIB_DIR)/elisp
+	@echo
+	@echo "* Installing Erlang Library"
+	install -m 775 -d $(DESTDIR)$(LIB_DIR)/ebin
+	install -m 775 ebin/*.beam $(DESTDIR)$(LIB_DIR)/ebin
+	install -m 775 ebin/*.app $(DESTDIR)$(LIB_DIR)/ebin
+	install -m 775 -d $(DESTDIR)$(LIB_DIR)/src
+	install -m 775 src/*/*.erl $(DESTDIR)$(LIB_DIR)/src
+	install -m 775 -d $(DESTDIR)$(LIB_DIR)/include
+	install -m 775 include/*.hrl $(DESTDIR)$(LIB_DIR)/include
+	install -m 775 -d $(DESTDIR)$(LIB_DIR)/priv
+	install -m 775 priv/suffixtree* $(DESTDIR)$(LIB_DIR)/priv
+	install -m 755 priv/gsuffixtree* $(DESTDIR)$(LIB_DIR)/priv
+	install -m 775 priv/side_effect_plt $(DESTDIR)$(LIB_DIR)/priv
+	install -m 775 priv/dialyzer_plt $(DESTDIR)$(LIB_DIR)/priv
+	@echo
+	@echo "*** Successfully installed. See README for usage instructions."
+	@echo
+
+wc:
+	@echo "* Emacs Lisp"
+	@wc -l */*.el | sort -nr
+	@echo "* Erlang"
+	@wc -l */*.erl | sort -nr
+	@echo "* C"
+	@wc -l */*.c | sort -nr
+
+EXAMPLE_CODE = inspec_examples.erl \
+    gen_refacs/refac_apply_to_remote_call.erl \
+    gen_refacs/refac_remove_an_argument.erl \
+    gen_refacs/refac_remove_an_import_attribute.erl \
+    gen_refacs/refac_add_an_import_attribute.erl \
+    gen_refacs/refac_specialise_a_function.erl \
+    gen_refacs/refac_swap_function_arguments.erl \
+    gen_composite_refacs/refac_batch_clone_elimination.erl \
+    gen_composite_refacs/refac_batch_prefix_module.erl \
+    gen_composite_refacs/refac_func_to_behav_instance.erl \
+    gen_composite_refacs/refac_expr_to_behav_instance.erl \
+    gen_composite_refacs/refac_unfold_behav_instance.erl \
+    refac_batch_rename_fun.erl regexp_re.erl keysearch_keyfind.erl
+
+docs-se-%: doc/symbolic_evaluation/%/overview.edoc
+	$(ERL) -noshell -eval \
+	"edoc:application($*, \"src/symbolic_evaluation/$*\", [$(DOC_OPTS), {dir, \"doc/symbolic_evaluation/$*\"}, {overview, \"$<\"}, no_subpackages])" \
+	-s init stop
+	(cd src ; cp $(EXAMPLE_CODE) ../doc/)
+
+docs-be: doc/behaviour_extraction/overview.edoc
+	$(ERL) -noshell -eval \
+	"edoc:application(behaviour_extraction, \"src/behaviour_extraction\", [$(DOC_OPTS), {dir, \"doc/behaviour_extraction\"}, {overview, \"$<\"}, no_subpackages])" \
+	-s init stop
+	(cd src ; cp $(EXAMPLE_CODE) ../doc/)
+
+
+docs: docs-se-core docs-se-evaluator docs-se-refactorings docs-be
+	$(ERL) -noshell -eval \
+	"edoc:application($(APPNAME), \".\", [$(DOC_OPTS), no_subpackages])" \
+	-s init stop
+	(cd src ; cp $(EXAMPLE_CODE) ../doc/)
+
+privdocs:
+	$(MAKE) DOC_OPTS='$(DOC_OPTS)',private docs
