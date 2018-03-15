@@ -1,9 +1,0 @@
-Makefile
-config.log
-config.status
-autom4te.cache
-elisp/wrangler.el
-*.beam
-*.DS_Store
-*~
-tags
