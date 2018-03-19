@@ -91,8 +91,8 @@ textarea:focus {
 </select> 
 
 
-<button class="btn1" onclick="openPopup()">Refractor!</button>
-<br>
+<input id="btn" type="button" value="Refactor" onclick="saveTextAsFile(); openPopup();"/>
+<input id="inputFileNameToSaveAs"></input>
 <div class="slider-wrapper">
     <input type="range" onchange="changeSlider(this.value)" value="0">
 </div>
@@ -144,5 +144,38 @@ function changeSlider(val){
     t2.scrollTop = val/100*t2.scrollHeight;
 }
 </script>
+
+<script>
+    function saveTextAsFile()
+    {
+        var textToWrite = document.getElementById("txtarea1").value;
+        var textFileAsBlob = new Blob([textToWrite], {type:'text/plain'});
+        var fileNameToSaveAs = document.getElementById("inputFileNameToSaveAs").value;
+    
+        var downloadLink = document.createElement("a");
+        downloadLink.download = fileNameToSaveAs;
+        downloadLink.innerHTML = "Download File";
+        if (window.webkitURL != null)
+        {
+          
+            downloadLink.href = window.webkitURL.createObjectURL(textFileAsBlob);
+        }
+        else
+        {
+            
+            downloadLink.href = window.URL.createObjectURL(textFileAsBlob);
+            downloadLink.onclick = destroyClickedElement;
+            downloadLink.style.display = "none";
+            document.body.appendChild(downloadLink);
+        }
+    
+        downloadLink.click();
+    }
+    
+    function destroyClickedElement(event)
+    {
+        document.body.removeChild(event.target);
+    }
+    </script>
 </body>
 </html>                 
