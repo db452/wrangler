@@ -17,6 +17,7 @@
             //    "C:\\Users\\Dennis\\Documents\\GitHub\\wrangler\\Code\\Codefile.java",
             //    "C:\\Program Files (x86)\\erl5.9\\lib\\jinterface-1.5.5\\priv\\OtpErlang.jar"
             //    cd("C:/Users/Dennis/Desktop/erlang test1").
+            //    javac -classpath ".:/usr/lib/erlang/lib/jinterface-1.8/priv/OtpErlang.jar" Codefile.java
             //]
         },
         
