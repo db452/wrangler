@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+
+body {
+    background-color: lightcyan;
+}
+h1 {
+    text-align: center;
+}
+
+p {
+    text-align: center;
+}
+
+.slider-wrapper {
+  width: 20px;
+  height: 150px;
+  position: relative;
+  bottom: 200px;
+  left: 493px;
+  padding: 0;
+}
+.slider-wrapper input {
+  width: 100px;
+  height: 20px;
+  margin: 0;
+  transform-origin: 75px 75px;
+  transform: rotate(90deg);
+}
+
+.inline-div {
+    display:inline-block;
+    width: 30%;
+    margin: 30px;
+}
+.inline-txtarea {
+    width: 90%;
+    height: 200px;
+    padding: 12px 20px;
+    border: 2px solid #01038A;
+    background-color: #FFFFFF;
+    font-size: 16px;
+    -webkit-transition: 0.5s;
+    transition: 0.5s;
+    outline: none;
+}
+
+textarea:focus {
+    border: 3px solid #181874;
+}
+ textarea {
+     resize: none;
+ }
+
+</style>
+
+<body>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+        <script src="js/scripts.js"></script>
+
+<h1 style="color:#181874;">Welcome to Wrangler Online</h1>
+<p style="color:#181874;">On this page you can submit any piece of Erlang code and refractor it online!</p>
+
+<div style="text-align:center">
+
+<div class="inline-div">
+        <p style="color:#181874;" align="center">Before</p>
+        <textarea id="txtarea1" style="overflow:hidden" cols="15" rows="15" class="inline-txtarea"></textarea>
+    </div>
+    <div class="inline-div">
+    <p style="color:#181874;" align="center">After</p>
+        <textarea id="txtarea2" style="overflow:hidden" cols="15" rows="15" class="inline-txtarea"></textarea>
+    </div>
+      
+<br>
+
+<select id="Options1">
+<option value="f1" selected="selected">Rename Variable Name</option>
+<option value="f2">Rename Function Name</option>
+<option value="f3">Rename Module Name</option>
+<option value="f4">Generalise Function Definition</option>
+<option value="f5">Move Function to Another Module</option>
+<option value="f6">Function Extraction</option>
+<option value="f7">Introduce New Variable</option>
+<option value="f8">Inline Variable</option>
+<option value="f9">Fold Expression Against Function</option>
+<option value="f10">Tuple Function Arguments</option>
+<option value="f11">Unfold Function Application</option>
+</select> 
+
+
+<button class="btn1" onclick="openPopup()">Refractor!</button>
+<br>
+<div class="slider-wrapper">
+    <input type="range" onchange="changeSlider(this.value)" value="0">
+</div>
+<applet id ="app" code="testApp.class" width=50 height=50></applet>
+<script src="script.js"></script>
+<script>
+function changeSlider(val){
+    var t1 = document.getElementById('txtarea1');
+    t1.scrollTop = val/100*t1.scrollHeight;
+    var t2 = document.getElementById('txtarea2');
+    t2.scrollTop = val/100*t2.scrollHeight;
+}
+</script>
+</body>
+</html>                 
