@@ -8,17 +8,23 @@
 
 import java.io.IOException;
 import com.ericsson.otp.erlang.*;
-public class Codefile {
+public class Codefile{
 
 	private static OtpSelf client;
 	private static OtpPeer server;
 	private static OtpConnection connection;
+	public static String oldVar;
+	public static String stringArity;
+	public static String newVar;
+	public static int arity;
 
 	public static void main(String[] args) throws IOException, OtpErlangExit, OtpErlangDecodeException, OtpAuthException {
 		
-		
+		oldVar = args[0];
+		stringArity = args[1];
+		arity = Integer.parseInt(stringArity);
+		newVar = args[2];
 
-		
 		client = new OtpSelf("client", "cookie");
 		server = new OtpPeer("server@db-VirtualBox");
 		connection = client.connect(server);
@@ -41,9 +47,6 @@ public class Codefile {
 	private static void renameFunction() throws IOException,OtpAuthException, OtpErlangExit, OtpErlangDecodeException{
 
 		String fileLoc = "/home/db/Desktop/test.erl";
-		String oldVar = "blobLoop";
-		int arity = 0;
-		String newVar = "fLoop";
 		String emacs = "/usr/bin/emacs"; //Please replace with emacs (or eclipse) location!
 		
 		connection.sendRPC("api_wrangler", "rename_fun", renamefunArgs(fileLoc, oldVar, arity, newVar, emacs));
