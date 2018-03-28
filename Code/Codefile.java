@@ -46,7 +46,7 @@ public class Codefile{
 
 	private static void renameFunction() throws IOException,OtpAuthException, OtpErlangExit, OtpErlangDecodeException{
 
-		String fileLoc = "/home/db/Desktop/test.erl";
+		String fileLoc = "/home/db/wrangler/Code/file.erl";
 		String emacs = "/usr/bin/emacs"; //Please replace with emacs (or eclipse) location!
 		
 		connection.sendRPC("api_wrangler", "rename_fun", renamefunArgs(fileLoc, oldVar, arity, newVar, emacs));

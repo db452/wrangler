@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+</head>
 <style>
 
 body {
@@ -67,11 +69,11 @@ textarea:focus {
 
 <div class="inline-div">
         <p style="color:#181874;" align="center">Before</p>
-        <textarea id="txtarea1" style="overflow:hidden" cols="15" rows="15" class="inline-txtarea"></textarea>
+        <textarea id="txtBefore" style="overflow:hidden" cols="15" rows="15" class="inline-txtarea"></textarea>
     </div>
     <div class="inline-div">
     <p style="color:#181874;" align="center">After</p>
-        <textarea id="txtarea2" style="overflow:hidden" cols="15" rows="15" class="inline-txtarea"></textarea>
+        <textarea id="txtAfter" style="overflow:hidden" cols="15" rows="15" class="inline-txtarea"></textarea>
     </div>
       
 <br>
@@ -91,18 +93,18 @@ textarea:focus {
 </select> 
 
 
-<button class="btn1" onclick="openPopup()">Refractor!</button>
+<button class="btn1" id= "refacButton">Refractor!</button>
 <br>
 <div class="slider-wrapper">
     <input type="range" onchange="changeSlider(this.value)" value="0">
 </div>
-<applet id ="app" code="testApp.class" width=50 height=50></applet>
+
 <script src="script.js"></script>
 <script>
 function changeSlider(val){
-    var t1 = document.getElementById('txtarea1');
+    var t1 = document.getElementById('txtBefore');
     t1.scrollTop = val/100*t1.scrollHeight;
-    var t2 = document.getElementById('txtarea2');
+    var t2 = document.getElementById('txtAfter');
     t2.scrollTop = val/100*t2.scrollHeight;
 }
 </script>
